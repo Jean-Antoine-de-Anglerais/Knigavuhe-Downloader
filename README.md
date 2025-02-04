@@ -19,10 +19,10 @@ Knigavuhe Downloader — это графическое десктопное пр
 
 0. Убедитесь, что у вас установлен Python, версии 3.12, или новее
 1. Скачайте и распакуйте исходный код проекта
-2. Настройте виртуальную среду: 'python3 -m venv venv'
-3. Активируйте виртуальную среду: 'source venv/bin/activate'
-4. Установите зависимости: 'pip3 install -r requirements.txt'
-5. Запустите приложение: 'python3 main.py'
+2. Настройте виртуальную среду: `python3 -m venv venv`
+3. Активируйте виртуальную среду: `source venv/bin/activate`
+4. Установите зависимости: `pip3 install -r requirements.txt`
+5. Запустите приложение: `python3 main.py`
 
 ### Для Linux
 
