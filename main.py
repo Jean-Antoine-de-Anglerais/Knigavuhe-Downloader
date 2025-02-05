@@ -18,6 +18,7 @@ def get_default_download_path():
     return Path.home() / "Music" / "Audiobooks"
 
 def get_page(url: str):
+    # Получаем страницу с аудиокнигой
     headers = {
         "User-Agent": "Mozilla/5.0"
     }
@@ -49,6 +50,7 @@ def get_json_data(soup: BeautifulSoup):
     return json_data
 
 def get_name_and_authors_and_readers(json_data: dict):
+    # Получаем название, имена авторов и имена чтецов
     name = json_data["book"]["name"]
     authors = []
     readers = []
@@ -68,6 +70,7 @@ def get_name_and_authors_and_readers(json_data: dict):
     return name, authors, readers
 
 def get_titles_and_links(json_data: dict):
+    # Получаем названия глав и ссылки на них
     titles = []
     links = []
 
@@ -78,6 +81,7 @@ def get_titles_and_links(json_data: dict):
     return dict(zip(titles, links))
 
 def download(data: dict, path: str, name: str, progress_callback):
+    # Скачиваем аудиокнигу
     if not os.path.exists(path):
         os.makedirs(path)
 
