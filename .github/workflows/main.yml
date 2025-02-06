@@ -30,11 +30,18 @@ jobs:
           pip install -r requirements.txt
           pip install Pillow
 
+      - name: Set Path Separator
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            echo "SEP=;" >> $GITHUB_ENV
+          else
+            echo "SEP=:" >> $GITHUB_ENV
+          fi
+
       - name: Build Executable
         run: |
-          SEP=":"
-          if [ "$RUNNER_OS" == "Windows" ]; then SEP=";"; fi
-          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data "icon.png$SEP." main.py
+          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data "icon.png${{ env.SEP }}."
 
 
       - name: Archive Build Artifacts
