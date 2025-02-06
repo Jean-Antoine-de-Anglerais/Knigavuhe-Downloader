@@ -31,7 +31,10 @@ jobs:
 
       - name: Build Executable
         run: |
-          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data "icon.png;." main.py 
+          SEP=":"
+          if [ "$RUNNER_OS" == "Windows" ]; then SEP=";"; fi
+          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data "icon.png$SEP." main.py
+
 
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v4
