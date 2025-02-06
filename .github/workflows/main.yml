@@ -1,0 +1,57 @@
+name: Build Executables
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    # Используем стратегию матрицы для сборки на разных ОС
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install -r requirements.txt
+          pip install Pillow
+
+      - name: Set Path Separator
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            echo "SEP=;" >> $GITHUB_ENV
+          else
+            echo "SEP=:" >> $GITHUB_ENV
+          fi
+
+      - name: Build Executable
+        shell: bash
+        run: |
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            ADD_DATA="--add-data=icon.png;."
+          else
+            ADD_DATA="--add-data=icon.png:."
+          fi
+          echo "Using ADD_DATA: $ADD_DATA"
+          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader "$ADD_DATA" main.py
+
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: executable-${{ matrix.os }}
+          path: dist/
