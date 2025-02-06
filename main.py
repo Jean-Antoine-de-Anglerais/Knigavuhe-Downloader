@@ -108,7 +108,7 @@ def download(data: dict, path: str, name: str, progress_callback):
     # Начинаем загрузку
     for title, link in data.items():
         try:
-            response = session.get(link, stream=True)
+            response = session.get(link, stream=True, allow_redirects=True)
             file_size = int(response.headers.get("Content-Length", 1))
 
             with open(os.path.join(path, title + ".mp3"), "wb") as f:
