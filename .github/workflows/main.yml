@@ -41,7 +41,7 @@ jobs:
 
       - name: Build Executable
         run: |
-          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data "icon.png:${{ env.SEP }}." main.py
+          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data=icon.png${{ env.SEP }}. main.py
 
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v4
