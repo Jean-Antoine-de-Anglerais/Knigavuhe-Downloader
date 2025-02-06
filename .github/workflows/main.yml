@@ -40,8 +40,18 @@ jobs:
           fi
 
       - name: Build Executable
+        shell: bash
         run: |
-          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data=icon.png${{ env.SEP }}. main.py
+          if [[ "$RUNNER_OS" == "Windows" ]]; then
+            # На Windows символ ; интерпретируется как разделитель команд,
+            # поэтому заключаем весь параметр в кавычки
+            ADD_DATA='--add-data="icon.png;."'
+          else
+            # На Linux и macOS достаточно простого формата
+            ADD_DATA='--add-data=icon.png:.'
+          fi
+          echo "Using ADD_DATA: $ADD_DATA"
+          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader $ADD_DATA main.py
 
       - name: Archive Build Artifacts
         uses: actions/upload-artifact@v4
