@@ -1,0 +1,40 @@
+name: Build Executables
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    # Используем стратегию матрицы для сборки на разных ОС
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'  # можно указать нужную версию
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install -r requirements.txt
+
+      - name: Build Executable
+        run: |
+          pyinstaller --onefile --windowed --icon=icon.ico --name=KnigavuheDownloader --add-data "icon.png;." main.py 
+
+      - name: Archive Build Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: executable-${{ matrix.os }}
+          path: dist/
